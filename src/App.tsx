@@ -1,46 +1,58 @@
-import React, { useEffect, useState } from 'react';
-import './App.css';
+import { useEffect, useState } from "react";
 
-function App() {
+const User:React.FC<any> = (props) => {
+    const [name, setName] = useState<string>("php");
+    const [age, setAge] = useState<number>(20);
   
-  const userAPI = () => {
-    return new Promise<any>((resolve ,reject) => {
-      return setTimeout(() => {
-        resolve({name: 'Sanskruti'});
-      }, 1000);
-   })
- };
-
-  const nonAsyn = () => {
-    setTimeout(() => {
-       console.log('from non asyn')
-    },1000);
-  }
- 
- const getUserData = async () => {
-  //const userData = await userAPI();
-  //console.log('userData' ,userData)
-
-  console.log('test before')
-  nonAsyn()
-  console.log('test after')
- }
-
-  const [title , setTitle ] = useState('not change');
-  useEffect( () => {
-    getUserData()
-    
-  }, [])
-
+    const [isError, setIsError] = useState<any>({ status: false, msg: "" });
   
-
-return (
-  <div>
-    use effect {title}
-  </div>
-
- );
-
+    const checkError = (msg = 'default msg') => {
+      alert(msg);
+    };
+  
+    useEffect(() => {
+        console.log('name',name)
+      if (!isError.status && name == 'php') {
+        checkError();
+      }else if(isError.status) {
+        checkError(isError.msg)
+      }
+    }, [isError]);
+  
+    const login = () => {
+      if (name === "php") {
+        setIsError({ status: true, msg: "name can not be php" });
+        return;
+      }
+  
+      console.log(name, age);
+    };
+ return (
+    <div>
+        <h1>User Component</h1>
+        {props.children}
+        <br />
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <br />
+        <input
+          type="number"
+          value={age}
+          onChange={(e) => setAge(parseInt(e.target.value))}
+        />
+        <br />
+        <button onClick={login}>login</button>
+    </div>
+ )
 }
+export default User;
+  
 
-export default App;
+  
+
+  
+
+
